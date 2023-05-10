@@ -1,5 +1,6 @@
 import './errorMessage.scss';
 
+
 const ErrorMessage = ({ typeError, updateChar}) => {
 
     return (
@@ -18,7 +19,7 @@ const ErrorMessage = ({ typeError, updateChar}) => {
                 <button onClick={updateChar}>Try IT</button>
             </div>
 
-            <img src="../../public/img/errorMessage/small_groot.png" alt="error img" />
+            <img src='/img/errorMessageImg/small_groot.png' alt="error img" />
 
         </div>
 

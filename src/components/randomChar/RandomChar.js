@@ -15,7 +15,7 @@ class RandomChar extends Component {
     state = {
         char: {},
         loading: true,
-        error: true
+        error: false
     }
 
     marvelService = new MarvelService();
@@ -29,10 +29,12 @@ class RandomChar extends Component {
 
     }
 
-
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        this.setState({ loading: true })
+        this.setState({ 
+            loading: true ,
+            error: false
+        })
 
         this.marvelService
             .getSingleCharacter(id)
@@ -58,7 +60,6 @@ class RandomChar extends Component {
                     {error ? <ErrorMessage updateChar={this.updateChar} /> : ''}
                     {loading ? <LouderSpinner /> : <View char={char} />}
                 </div>
-
 
                 <div className="randomchar__static">
                     <p className="randomchar__title">
