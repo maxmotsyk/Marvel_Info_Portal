@@ -6,11 +6,6 @@ import LouderSpinner from '../louderSpinner/louderSpinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 
 class RandomChar extends Component {
-    constructor(props) {
-        super(props);
-
-        this.updateChar();
-    }
 
     state = {
         char: {},
@@ -27,6 +22,10 @@ class RandomChar extends Component {
             loading: false
         })
 
+    }
+
+    componentDidMount (){
+        this.updateChar();
     }
 
     updateChar = () => {
@@ -82,9 +81,11 @@ class RandomChar extends Component {
 
 const View = ({ char: { name, description, homepage, thumbnail, wiki } }) => {
 
+    const imgStyle = thumbnail?.includes('image_not_available') ? {objectFit : 'contain'} : null;
+
     return (
         <>
-            <img src={thumbnail} alt={`img ${name}`} className="randomchar__img" />
+            <img style={imgStyle} src={thumbnail} alt={`img ${name}`} className="randomchar__img" />
             <div className="randomchar__info">
                 <p className="randomchar__name">{name}</p>
                 <p className="randomchar__descr">{description}</p>

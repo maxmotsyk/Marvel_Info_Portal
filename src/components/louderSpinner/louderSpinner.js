@@ -3,7 +3,7 @@ const LouderSpinner = () => {
 
     return (
         <svg xmlns="http://www.w3.org/2000/svg" 
-            style={{margin: "auto", background: "rgb(255, 255, 255)", display: "block", shape_rendering: "auto"}} width="197px" height="197px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+            style={{margin: "0 auto", background: "rgb(255, 255, 255)", display: "block", shape_rendering: "auto"}} width="197px" height="197px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
             <g transform="rotate(0 50 50)">
                 <rect x="48.5" y="25.5" rx="0.72" ry="0.72" width="3" height="9" fill="#9f0013">
                     <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1.1363636363636365s" begin="-1.0551948051948052s" repeatCount="indefinite"></animate>
