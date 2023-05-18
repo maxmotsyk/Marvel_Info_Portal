@@ -15,6 +15,7 @@ class CharList extends Component {
 
     marvelService = new MarvelService();
 
+
     componentDidMount() {
         this.updateCharList();
     }
@@ -29,7 +30,6 @@ class CharList extends Component {
     }
 
     onChatListLouded = (char) => {
-        console.log(char);
 
         this.setState({
             charList: char,
@@ -51,15 +51,20 @@ class CharList extends Component {
 
     }
 
+    onClickChar = () =>{
+        console.log('click');
+    }
+
     render() {
 
         const { charList, louding, error } = this.state;
+        const {onCharSelected} = this.props;
 
         return (
 
             < div className="char__list" >
                 {error ? <ErrorMessage updateChar={this.updateCharList} /> : null}
-                {louding ? <LouderSpinner /> : <View charList={charList} />}
+                {louding ? <LouderSpinner /> : <View charList={charList} onCharSelected ={onCharSelected} />}
                 <button className="button button__main button__long">
                     <div className="inner">load more</div>
                 </button>
@@ -70,19 +75,20 @@ class CharList extends Component {
 
 }
 
-const View = ({ charList }) => {
+const View = ({ charList, onCharSelected}) => {
 
     return (
 
         <ul className="char__grid">
             {
-                charList.map(({ thumbnail, name }) => {
-
+                charList.map(({id, thumbnail, name }) => {
                     const imgStyle = thumbnail.includes('image_not_available') ? { objectFit: 'contain' } : null;
-
                     return (
 
-                        <li key={1} className="char__item">
+                        <li 
+                            onClick={() => onCharSelected(id)}
+                            key={id} 
+                            className="char__item">
 
                             <img style={imgStyle}
                                 src={thumbnail}

@@ -39,7 +39,6 @@ class RandomChar extends Component {
             .getSingleCharacter(id)
             .then(this.onChatLouded)
             .catch(this.onError)
-
     }
 
     onError = () => {

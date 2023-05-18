@@ -7,6 +7,14 @@ import decoration from '../../resources/img/vision.png';
 
 class App extends Component {
 
+    state = {   
+        selectedChar : 1011400
+    }
+
+    onCharSelected = (id) =>{
+        this.setState({selectedChar: id})
+    }
+
     render () {
 
         return (
@@ -17,8 +25,8 @@ class App extends Component {
                      <RandomChar/>
                    
                     <div className="char__content">
-                        <CharList/>
-                        <CharInfo/>
+                        <CharList onCharSelected={this.onCharSelected}/>
+                        <CharInfo selectedChar={this.state.selectedChar}/>
                     </div>
                     <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>
