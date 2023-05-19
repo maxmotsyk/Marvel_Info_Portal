@@ -49,7 +49,9 @@ class CharList extends Component {
             .then(this.onChatListLouded)
             .catch(this.onError)
 
+
     }
+    
 
     onClickChar = () =>{
         console.log('click');

@@ -28,6 +28,8 @@ class CharInfo extends Component {
 
     }
 
+
+
     onCharInfoUpdate = () => {
 
         this.setState({
@@ -37,6 +39,7 @@ class CharInfo extends Component {
         this.marvelService.getSingleCharacter(this.props.selectedChar)
             .then(this.onCharInfoLouded)
             .catch(this.onError)
+
     }
 
     onCharInfoLouded = (char) => {
