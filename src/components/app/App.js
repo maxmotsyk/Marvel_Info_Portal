@@ -17,7 +17,7 @@ class App extends Component {
     }
 
     render () {
-
+        
         return (
             <div className="app">
                 <AppHeader/>
@@ -41,7 +41,7 @@ class App extends Component {
                     </div>
 
                     <img className="bg-decoration" src={decoration} alt="vision"/>
-                    
+
                 </main>
 
             </div>
