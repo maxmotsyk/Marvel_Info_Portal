@@ -1,4 +1,4 @@
-[![marvel info portal](https://github.com/maxmotsyk/Marvel_Info_Portal/raw/main/public/img/ReadmyImg/marvel.mov](https://github.com/maxmotsyk/Marvel_Info_Portal/raw/main/public/img/ReadmyImg/marvel.mov)
+[![marvel info portal](https://github.com/maxmotsyk/Marvel_Info_Portal/raw/main/public/img/ReadmyImg/marvel.png](https://github.com/maxmotsyk/Marvel_Info_Portal/raw/main/public/img/ReadmyImg/marvel.mov)
 
 # Marvel Info Portal
 
