@@ -1,4 +1,5 @@
 import { Component } from 'react/cjs/react.production.min';
+import PropTypes from 'prop-types'
 import MarvelService from '../../services/MarvelService';
 import LouderSpinner from '../louderSpinner/louderSpinner';
 import ErrorMessage from '../errorMessage/errorMessage';
@@ -27,8 +28,6 @@ class CharInfo extends Component {
         }
 
     }
-
-
 
     onCharInfoUpdate = () => {
 
@@ -145,6 +144,11 @@ const View = ({ char }) => {
             </ul>
         </>
     )
+
+}
+
+CharInfo.propTypes  = {
+    selectedChar: PropTypes.number,
 
 }
 
