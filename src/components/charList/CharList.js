@@ -78,8 +78,6 @@ class CharList extends Component {
             .getAllCharacters(offset)
             .then(this.onCharListLouded)
             .catch(this.onError)
-
-
     }
 
 
@@ -109,16 +107,33 @@ class CharList extends Component {
 
 const View = ({ charList, onCharSelected }) => {
 
+    let massRefArr = [];
+
+    const setRefArr = (e) => {
+        massRefArr.push(e);
+    }
+
+    const onClickItem = (i, id) => {
+        onCharSelected(id);
+
+        massRefArr.forEach(item => item.classList.remove('char__item_selected'));
+        massRefArr[i].classList?.add('char__item_selected');
+        massRefArr[i].focus();
+    }
+
+
     return (
 
         <ul className="char__grid">
             {
-                charList.map(({ id, thumbnail, name }) => {
+                charList.map(({ id, thumbnail, name }, i) => {
                     const imgStyle = thumbnail.includes('image_not_available') ? { objectFit: 'contain' } : null;
                     return (
 
                         <li
-                            onClick={() => onCharSelected(id)}
+                            onClick={() => onClickItem(i, id)}
+                            tabIndex={0}
+                            ref = {setRefArr}
                             key={id}
                             className="char__item">
 
