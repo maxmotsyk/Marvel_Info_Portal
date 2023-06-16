@@ -1,4 +1,5 @@
 import { Component } from 'react/cjs/react.production.min';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MarvelService from '../../services/MarvelService';
 import LouderSpinner from '../louderSpinner/louderSpinner';
@@ -6,106 +7,78 @@ import './charList.scss';
 import ErrorMessage from '../errorMessage/errorMessage';
 
 
-class CharList extends Component {
+const CharList = ({ onCharSelected }) => {
+    const [charList, setCharList] = useState([]);
+    const [louding, setLouding] = useState(true);
+    const [error, setError] = useState(false);
+    const [newItemsLouding, setNewItemsLouding] = useState(false);
+    const [offset, setOffset] = useState(210);
+    const [maxChar, setMaxChar] = useState(1540);
+    const [endCharList, setEndCharList] = useState(false);
+    const marvelService = new MarvelService();
 
-    state = {
-        charList: [],
-        louding: true,
-        error: false,
-        newItemsLouding: false,
-        offset: 210,
-        maxChar: 1540,
-        endCharList: false
+    useEffect(()=> {
+        updateCharList()
+    },[])
+
+    const updateCharList = (offset) => {
+
+        marvelService
+            .getAllCharacters(offset)
+            .then(onCharListLouded)
+            .catch(onError)
     }
 
-    marvelService = new MarvelService();
+    const onCharListLouded = (newCharList) => {
 
-    componentDidMount() {
-        this.updateCharList();
-    }
-
-    onAdditionLoading = (offset) => {
-        
-        this.onCharListLoauding();
-        this.updateCharList(offset);
-    }
-
-    onCharListLoauding = () => {
-
-        this.setState({
-            newItemsLouding: true
-        })
-    }
-
-    onError = () => {
-
-        this.setState({
-            loading: false,
-            error: true
-        })
-
-    }
-
-    onCharListLouded = (newCharList) => {
-
-        if (this.state.offset + 9 >= this.state.maxChar) {
-
-            this.setState({
-                endCharList: true
-            })
+        if (offset + 9 >= maxChar) {
+            
+            setEndCharList(true);
 
         }
         else {
-
-            this.setState(({ charList, offset }) => ({
-                charList: [...charList, ...newCharList],
-                louding: false,
-                newItemsLouding: false,
-                offset: offset + 9
-            }))
-
+            setCharList([...charList,...newCharList]);
+            setLouding(false);
+            setNewItemsLouding(false);
+            setOffset(offset + 9)
         }
 
     }
 
-    updateCharList = (offset) => {
-
-        this.setState({
-            loading: true,
-        })
-
-        this.marvelService
-            .getAllCharacters(offset)
-            .then(this.onCharListLouded)
-            .catch(this.onError)
+    const onAdditionLoading = (offset) => {
+        onCharListLoauding();
+        updateCharList(offset);
     }
 
-
-    render() {
-
-        const { charList, louding, error, offset, newItemsLouding, endCharList } = this.state;
-        const { onCharSelected } = this.props;
-
-        return (
-
-            < div className="char__list" >
-                {error ? <ErrorMessage updateChar={this.updateCharList} /> : null}
-                {louding ? <LouderSpinner /> : <View charList={charList} onCharSelected={onCharSelected} />}
-                <button
-                    style={endCharList ? { visibility: "hidden" } : null}
-                    disabled={newItemsLouding}
-                    onClick={() => { this.onAdditionLoading(offset) }}
-                    className="button button__main button__long">
-                    <div className="inner">{newItemsLouding ? "Loading" : 'load more'}</div>
-                </button>
-            </div >
-        )
-
+    const onCharListLoauding = () => {
+        setNewItemsLouding(true);
     }
+
+    const onError = () => {
+
+        setLouding(false);
+        setError(true);
+    }
+
+    return (
+
+        <div className="char__list" >
+            {error ? <ErrorMessage updateChar={updateCharList} /> : null}
+            {louding ? <LouderSpinner /> : <View charList={charList} onCharSelected={onCharSelected} />}
+            <button
+                style={endCharList ? { visibility: "hidden" } : null}
+                disabled={newItemsLouding}
+                onClick={() => { onAdditionLoading(offset) }}
+                className="button button__main button__long">
+                <div className="inner">{newItemsLouding ? "Loading" : 'load more'}</div>
+            </button>
+        </div>
+
+    )
 
 }
 
-const View = ({ charList, onCharSelected }) => {
+const View = ({charList, onCharSelected }) => {
 
     let massRefArr = [];
 
@@ -121,7 +94,6 @@ const View = ({ charList, onCharSelected }) => {
         massRefArr[i].focus();
     }
 
-
     return (
 
         <ul className="char__grid">
@@ -133,7 +105,7 @@ const View = ({ charList, onCharSelected }) => {
                         <li
                             onClick={() => onClickItem(i, id)}
                             tabIndex={0}
-                            ref = {setRefArr}
+                            ref={setRefArr}
                             key={id}
                             className="char__item">
 
@@ -157,7 +129,7 @@ const View = ({ charList, onCharSelected }) => {
 }
 
 CharList.propTypes = {
-    onCharSelected : PropTypes.func
+    onCharSelected: PropTypes.func
 }
 
 export default CharList;

@@ -1,4 +1,4 @@
-import { Component } from 'react/cjs/react.production.min';
+import { useState, useEffect} from 'react';
 import PropTypes from 'prop-types'
 import MarvelService from '../../services/MarvelService';
 import LouderSpinner from '../louderSpinner/louderSpinner';
@@ -7,78 +7,54 @@ import Skeleton from '../skeleton/Skeleton'
 import './charInfo.scss';
 
 
-class CharInfo extends Component {
+const CharInfo = ({selectedChar}) => {
+    const [char, setChar] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
-    state = {
-        char: {},
-        louding: true,
-        error: false
-    }
+    const skeleton = char || loading || error ? null :  <Skeleton/>;
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spiner = loading ? <LouderSpinner/> : null;
+    const content = !(loading || error || !char) ? <View char={char}/> : null;
+    const marvelService = new MarvelService();
 
-    marvelService = new MarvelService();
+    useEffect(() => {
+        onCharInfoUpdate();
+    },[selectedChar])
 
-    componentDidMount() {
-        this.onCharInfoUpdate();
-    }
 
-    componentDidUpdate(prevProps) {
+    const onCharInfoUpdate = () => {
 
-        if (this.props.selectedChar !== prevProps.selectedChar) {
-            this.onCharInfoUpdate();
-        }
+        setLoading(true);
 
-    }
-
-    onCharInfoUpdate = () => {
-
-        this.setState({
-            loading: true
-        })
-
-        this.marvelService.getSingleCharacter(this.props.selectedChar)
-            .then(this.onCharInfoLouded)
-            .catch(this.onError)
+        marvelService.getSingleCharacter(selectedChar)
+            .then(onCharInfoLouded)
+            .catch(onError)
 
     }
 
-    onCharInfoLouded = (char) => {
+    const onCharInfoLouded = (char) => {
 
-        this.setState({
-            char: char,
-            loading:false
-            
-        })
+        setChar(char);
+        setLoading(false);
 
     }
 
-    onError = () => {
+    const onError = () => {
 
-        this.setState({
-            loading: false,
-            error: true
-        })
+        setLoading(false);
+        setError(true)
 
     }
 
-    render() {
-        const { char, loading, error } = this.state;
-
-        const skeleton = char || loading || error ? null :  <Skeleton/>
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spiner = loading ? <LouderSpinner/> : null;
-        const content = !(loading || error || !char) ? <View char={char}/> : null;
-
-
-        return (
-            <div className="char__info">
-               {skeleton}
-               {errorMessage}
-               {spiner}
-               {content}
-            </div>
-        )
-
-    }
+    return (
+        <div className="char__info">
+           {skeleton}
+           {errorMessage}
+           {spiner}
+           {content}
+        </div>
+    )
 
 }
 
@@ -149,7 +125,6 @@ const View = ({ char }) => {
 
 CharInfo.propTypes  = {
     selectedChar: PropTypes.number,
-
 }
 
 export default CharInfo;
