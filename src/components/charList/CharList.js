@@ -1,4 +1,3 @@
-import { Component } from 'react/cjs/react.production.min';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MarvelService from '../../services/MarvelService';

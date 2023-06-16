@@ -1,4 +1,3 @@
-import { Component } from 'react/cjs/react.production.min';
 import { useState, useEffect } from 'react';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
@@ -7,7 +6,6 @@ import LouderSpinner from '../louderSpinner/louderSpinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 
 const RandomChar = () =>  {
-
     const [char, setChar] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
