@@ -1,30 +1,33 @@
-class MarvelService {
-    _apiKey = process.env.REACT_APP_MARVEL_API_KEY;
-    _apiBase = process.env.REACT_APP_MARVEL_BASE_URL;
-    _baseOffset = 210;
+import { useHttp } from "../hooks/htttp.hook";
 
-    getResource = async (url) =>  {
-        let res = await fetch(url);
+const useMarvelService = () => {
+    const {loading, requst, error, clearError} = useHttp();
+    const _apiKey = process.env.REACT_APP_MARVEL_API_KEY;
+    const _apiBase = process.env.REACT_APP_MARVEL_BASE_URL;
+    const _baseOffset = 210;
 
-        if(!res.ok){
-            throw new Error(`Coulde not fetch ${url}, status ${res.status}`);
-        }
+    // getResource = async (url) =>  {
+    //     let res = await fetch(url);
 
-        return await res.json();
+    //     if(!res.ok){
+    //         throw new Error(`Coulde not fetch ${url}, status ${res.status}`);
+    //     }
 
+    //     return await res.json();
+
+    // }
+
+    const getAllCharacters = async (offset = _baseOffset) => {
+        const res = await requst(`${_apiBase}/characters?limit=9&offset=${offset}&apikey=${_apiKey}`);
+        return res.data.results.map(_transformeCharacter);
     }
 
-    getAllCharacters = async (offset = this._baseOffset) => {
-        const res = await this.getResource(`${this._apiBase}/characters?limit=9&offset=${offset}&apikey=${this._apiKey}`);
-        return res.data.results.map(this._transformeCharacter);
+    const getSingleCharacter = async (id) =>{
+        const res =  await requst(`${_apiBase}/characters/${id}?apikey=${_apiKey}`);
+        return _transformeCharacter(res.data.results[0]);
     }
 
-    getSingleCharacter = async (id) =>{
-        const res =  await this.getResource(`${this._apiBase}/characters/${id}?apikey=${this._apiKey}`);
-        return this._transformeCharacter(res.data.results[0]);
-    }
-
-    _transformeCharacter = (res) =>{
+    const _transformeCharacter = (res) =>{
 
         return {
             id: res.id,
@@ -38,6 +41,9 @@ class MarvelService {
 
     }
 
+    return {loading, error, getAllCharacters, getSingleCharacter,clearError}
+
 }
 
-export default MarvelService;
+export default useMarvelService;
+

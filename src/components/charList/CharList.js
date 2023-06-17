@@ -1,31 +1,26 @@
 import { useState, useEffect } from 'react';
+import useMarvelService from '../../services/MarvelService';
 import PropTypes from 'prop-types';
-import MarvelService from '../../services/MarvelService';
-import LouderSpinner from '../louderSpinner/louderSpinner';
 import './charList.scss';
 import ErrorMessage from '../errorMessage/errorMessage';
 
-
 const CharList = ({ onCharSelected }) => {
     const [charList, setCharList] = useState([]);
-    const [louding, setLouding] = useState(true);
-    const [error, setError] = useState(false);
-    const [newItemsLouding, setNewItemsLouding] = useState(false);
     const [offset, setOffset] = useState(210);
     const [maxChar, setMaxChar] = useState(1540);
     const [endCharList, setEndCharList] = useState(false);
-    const marvelService = new MarvelService();
+    const {loading, error, getAllCharacters, clearError}= useMarvelService();  
 
     useEffect(()=> {
         updateCharList()
     },[])
 
     const updateCharList = (offset) => {
+        clearError()
 
-        marvelService
-            .getAllCharacters(offset)
+        getAllCharacters(offset)
             .then(onCharListLouded)
-            .catch(onError)
+            .catch(error)
     }
 
     const onCharListLouded = (newCharList) => {
@@ -37,39 +32,28 @@ const CharList = ({ onCharSelected }) => {
         }
         else {
             setCharList([...charList,...newCharList]);
-            setLouding(false);
-            setNewItemsLouding(false);
             setOffset(offset + 9)
         }
 
     }
 
     const onAdditionLoading = (offset) => {
-        onCharListLoauding();
         updateCharList(offset);
     }
 
-    const onCharListLoauding = () => {
-        setNewItemsLouding(true);
-    }
 
-    const onError = () => {
-
-        setLouding(false);
-        setError(true);
-    }
 
     return (
 
         <div className="char__list" >
             {error ? <ErrorMessage updateChar={updateCharList} /> : null}
-            {louding ? <LouderSpinner /> : <View charList={charList} onCharSelected={onCharSelected} />}
+            <View charList={charList} onCharSelected={onCharSelected}/>
             <button
                 style={endCharList ? { visibility: "hidden" } : null}
-                disabled={newItemsLouding}
+                disabled={loading}
                 onClick={() => { onAdditionLoading(offset) }}
                 className="button button__main button__long">
-                <div className="inner">{newItemsLouding ? "Loading" : 'load more'}</div>
+                <div className="inner">{loading ? "Loading" : 'load more'}</div>
             </button>
         </div>
 

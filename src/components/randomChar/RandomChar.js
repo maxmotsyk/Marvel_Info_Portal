@@ -1,46 +1,36 @@
 import { useState, useEffect } from 'react';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import LouderSpinner from '../louderSpinner/louderSpinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 
 const RandomChar = () =>  {
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const marvelService = new MarvelService();  
+    const {loading, error, getSingleCharacter, clearError}= useMarvelService();  
 
     useEffect(() => {
         updateChar()
-    }, [])
+    },[])
 
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        setLoading(true);
-        setError(false);
 
-        marvelService
-            .getSingleCharacter(id)
+        getSingleCharacter(id)
             .then(onChatLouded)
-            .catch(onError)
+            .catch(error)
     }
 
     const onChatLouded = (char) => {
         setChar(char);
-        setLoading(false);
-    }
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     return (
         <div className="randomchar">
 
             <div className="randomchar__block">
-                {error ? <ErrorMessage updateChar={updateChar} /> : ''}
+                {error ? <ErrorMessage updateChar /> : ''}
                 {loading ? <LouderSpinner /> : <View char={char} />}
             </div>
 

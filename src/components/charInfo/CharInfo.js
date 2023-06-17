@@ -1,6 +1,6 @@
 import { useState, useEffect} from 'react';
 import PropTypes from 'prop-types'
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import LouderSpinner from '../louderSpinner/louderSpinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 import Skeleton from '../skeleton/Skeleton'
@@ -9,14 +9,11 @@ import './charInfo.scss';
 
 const CharInfo = ({selectedChar}) => {
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-
+    const {loading, error, getSingleCharacter, clearError}= useMarvelService();  
     const skeleton = char || loading || error ? null :  <Skeleton/>;
     const errorMessage = error ? <ErrorMessage/> : null;
     const spiner = loading ? <LouderSpinner/> : null;
     const content = !(loading || error || !char) ? <View char={char}/> : null;
-    const marvelService = new MarvelService();
 
     useEffect(() => {
         onCharInfoUpdate();
@@ -24,28 +21,18 @@ const CharInfo = ({selectedChar}) => {
 
 
     const onCharInfoUpdate = () => {
-
-        setLoading(true);
-
-        marvelService.getSingleCharacter(selectedChar)
+        clearError();
+        
+        getSingleCharacter(selectedChar)
             .then(onCharInfoLouded)
-            .catch(onError)
+            .catch(error)
 
     }
 
     const onCharInfoLouded = (char) => {
-
         setChar(char);
-        setLoading(false);
-
     }
 
-    const onError = () => {
-
-        setLoading(false);
-        setError(true)
-
-    }
 
     return (
         <div className="char__info">
