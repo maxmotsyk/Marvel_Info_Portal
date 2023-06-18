@@ -5,17 +5,7 @@ const useMarvelService = () => {
     const _apiKey = process.env.REACT_APP_MARVEL_API_KEY;
     const _apiBase = process.env.REACT_APP_MARVEL_BASE_URL;
     const _baseOffset = 210;
-
-    // getResource = async (url) =>  {
-    //     let res = await fetch(url);
-
-    //     if(!res.ok){
-    //         throw new Error(`Coulde not fetch ${url}, status ${res.status}`);
-    //     }
-
-    //     return await res.json();
-
-    // }
+    const _baseComicsOffset = 200;
 
     const getAllCharacters = async (offset = _baseOffset) => {
         const res = await requst(`${_apiBase}/characters?limit=9&offset=${offset}&apikey=${_apiKey}`);
@@ -25,6 +15,11 @@ const useMarvelService = () => {
     const getSingleCharacter = async (id) =>{
         const res =  await requst(`${_apiBase}/characters/${id}?apikey=${_apiKey}`);
         return _transformeCharacter(res.data.results[0]);
+    }
+
+    const getAllComics = async (offset = _baseComicsOffset) => {
+        const res = await requst(`${_apiBase}/comics?limit=9&offset=${offset}&apikey=${_apiKey}`)
+        return res.data.results.map(_transformeComics)
     }
 
     const _transformeCharacter = (res) =>{
@@ -41,7 +36,20 @@ const useMarvelService = () => {
 
     }
 
-    return {loading, error, getAllCharacters, getSingleCharacter,clearError}
+    const _transformeComics = (res) =>{
+
+        return {
+            id: res.id,
+            title: res.title,
+            description: res.description,
+            thumbnail: `${res.thumbnail.path}.${res.thumbnail.extension}`,
+            homepage: res.urls[0].url,
+            price: res.prices[0].price,
+        }
+
+    }
+
+    return {loading, error, getAllCharacters, getSingleCharacter, clearError, getAllComics}
 
 }
 

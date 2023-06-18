@@ -41,8 +41,6 @@ const CharList = ({ onCharSelected }) => {
         updateCharList(offset);
     }
 
-
-
     return (
 
         <div className="char__list" >
