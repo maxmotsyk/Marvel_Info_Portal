@@ -25,11 +25,11 @@ const Main = () => {
                     <CharList onCharSelected={onCharSelected} />
                 </ErrorBoundary>
 
-
                 <ErrorBoundary>
                     <CharInfo selectedChar={selectedChar} />
                 </ErrorBoundary>
 
+        
             </div>
 
             <img className="bg-decoration" src={decoration} alt="vision" />

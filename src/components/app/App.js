@@ -1,5 +1,4 @@
 import AppHeader from "../appHeader/AppHeader";
-import decoration from '../../resources/img/vision.png';
 import {Main, ComicsList, ComicPage, Page404} from '../../pages'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 

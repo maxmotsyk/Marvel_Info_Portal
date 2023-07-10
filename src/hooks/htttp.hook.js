@@ -10,12 +10,16 @@ export const useHttp = () => {
         try{
             const response = await fetch(url, {method, body, headers});
             
-            if(!response.ok){
+            if(!response.ok ){
                 throw new Error(`Coulde not fetch ${url}, status ${response.status}`);
             }
-
+           
             const data = await response.json();
-
+            
+            if(data.data.count <= 0){
+                throw new Error('Not found');
+            }
+            
             setLoading(false);
             return data
         }   
